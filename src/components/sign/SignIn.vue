@@ -29,7 +29,9 @@ import { ref } from 'vue'
 import { ElNotification } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import { useRouter } from 'vue-router'
+import { useReCaptcha } from 'vue-recaptcha-v3'
 import { useAuthStore } from '@/stores/authStore'
+import { useRecaptchaStore } from '@/stores/recaptchaStore'
 
 type LoginFormType = {
   email: string
@@ -75,7 +77,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
       ElNotification.error({
         type: 'error',
         title: '失敗',
-        message: e.response.data.msg,
+        message: e.msg,
         duration: 3000,
       })
     } finally {

@@ -13,11 +13,16 @@ type NewsType = {
 
 export const useNewsStore = defineStore('news', () => {
   const newsData = ref<NewsType[] | null>(null)
+  const agencyRef = ref('')
+  const tagRef = ref('')
+
   function initData() {
     newsData.value = null
   }
   async function getNewsData(agency: string, tag: string) {
     let data
+    agencyRef.value = agency
+    tagRef.value = tag
     if (agency === 'ltnMilitary') {
       data = await serverInstance({
         url: `news/ltn/ltn-military/${tag}`,
@@ -65,5 +70,5 @@ export const useNewsStore = defineStore('news', () => {
     return result
   }
 
-  return { newsData, getNewsData, initData, storeNews, deleteNews, updateMemo }
+  return { agencyRef, tagRef, newsData, getNewsData, initData, storeNews, deleteNews, updateMemo }
 })

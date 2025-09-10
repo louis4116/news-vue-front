@@ -1,7 +1,7 @@
 <template>
   <el-card style="max-width: 320px; min-width: 200px; min-height: 360px">
     <template #header>
-      <h2 class="home-card-header">{{ props.name }}</h2>
+      <h2 class="home-card-header line-base-set">{{ props.name }}</h2>
     </template>
     <el-image
       :src="props.img"
@@ -9,7 +9,7 @@
       class="min-h-[10rem]"
       style="display: flex; align-items: center; justify-content: center"
     />
-    <div class="home-card-intro">
+    <div class="home-card-intro line-base-set">
       {{ props.para }}
     </div>
     <router-link :to="{ name: 'news', params: { id: props.id } }">

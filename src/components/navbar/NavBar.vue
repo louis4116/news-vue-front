@@ -12,14 +12,21 @@
             {{ nav.name }}
           </li></router-link
         >
-      </ul>
-    </div></el-header
-  >
+        <div
+          class="flex items-center p-2 cursor-pointer active:rotate-120 transition duration-200"
+          @click="handleRefresh"
+          v-if="is_ShowRefresh"
+        >
+          <el-icon :size="20"><Refresh /></el-icon>
+        </div>
+      </ul></div
+  ></el-header>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { navData } from './navData'
+import { useNewsStore } from '@/stores/newsStore'
 import { useRoute } from 'vue-router'
 
 //nav樣式
@@ -32,10 +39,23 @@ const navUnactive = 'border-[rgba(0,0,0,0)] bg-[rgba(0,0,0,0)] '
 
 const route = useRoute()
 
+const newStore = useNewsStore()
+
 const activeId = ref('')
+
+const is_ShowRefresh = computed(() => {
+  return activeId.value ? true : false
+})
 
 const handleClick = (id: string) => {
   activeId.value = id
+}
+
+const handleRefresh = async () => {
+  const agency = newStore.agencyRef
+  const tag = newStore.tagRef
+  newStore.initData()
+  await newStore.getNewsData(agency, tag)
 }
 
 onMounted(() => {

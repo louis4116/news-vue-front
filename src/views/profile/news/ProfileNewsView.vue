@@ -150,8 +150,10 @@ const dateClick = () => {
 
 const datePick = (start: string, end: string) => {
   const startParse = Date.parse(start)
-  const endParse = Date.parse(end)
+  const endParse = Date.parse(end) + 86400000
+
   const newsData = filterData(activeTag.value)
+
   const result = newsData.filter((item: ProfileNews) => {
     const tempDate = Date.parse(item.storedDate)
     return startParse < tempDate && tempDate < endParse

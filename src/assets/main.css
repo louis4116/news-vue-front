@@ -20,3 +20,9 @@
     /* color: #333; */
   }
 }
+
+@layer components {
+  .line-base-set {
+    @apply tracking-wider text-justify leading-7;
+  }
+}

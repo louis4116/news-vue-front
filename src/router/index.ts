@@ -6,6 +6,7 @@ import ProfileView from '@/views/profile/ProfileView.vue'
 import ProfileInfView from '@/views/profile/inf/ProfileInfView.vue'
 import ProfileNewsView from '@/views/profile/news/ProfileNewsView.vue'
 import SignOutView from '@/views/sign/SignOutView.vue'
+import ForgetView from '@/views/forget/ForgetView.vue'
 import ResetView from '@/views/reset/ResetView.vue'
 
 import { useAuthStore } from '@/stores/authStore'
@@ -73,18 +74,14 @@ const router = createRouter({
     {
       path: '/forget',
       name: 'forget',
+      component: ForgetView,
+    },
+    {
+      path: '/resetPassowrd/:id',
+      name: 'reset',
       component: ResetView,
     },
   ],
 })
-
-// router.beforeEach(async () => {
-//   const authSt = authStore()
-//   const result = await authSt.getMe()
-//   if (result) {
-//     authSt.userData = result.data.data
-//   }
-//   console.log(result)
-// })
 
 export default router

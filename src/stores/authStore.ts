@@ -108,6 +108,7 @@ export const useAuthStore = defineStore('auth', () => {
   async function resetEmail(email: string) {
     const result = await serverInstance({
       url: 'user/forgetPassword',
+      method: 'post',
       data: {
         email,
       },

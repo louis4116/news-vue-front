@@ -3,7 +3,7 @@
     <el-card>
       <template #header>
         <div class="flex items-center justify-between">
-          <h2 class="home-card-header">{{ renderTitle }}</h2>
+          <h2 class="home-card-header line-base-set">{{ renderTitle }}</h2>
           <el-button @click="storeData" v-if="authStore.userData?._id"
             ><el-icon><Plus /></el-icon
           ></el-button>
@@ -14,7 +14,7 @@
         fit="cover"
         style="height: 200px; display: flex; align-items: center; justify-content: center"
       />
-      <div class="home-card-intro mt-5">
+      <div class="home-card-intro mt-5 line-base-set">
         {{ props.title }}
       </div>
       <template #footer
@@ -34,14 +34,6 @@ type DefaultImg = {
   [key: string]: string[]
 }
 
-type NewsType = {
-  date: string
-  url: string
-  img: string
-  source: string
-  title: string
-}
-
 const newStore = useNewsStore()
 const authStore = useAuthStore()
 
@@ -54,10 +46,31 @@ const props = defineProps({
 })
 
 const defaultImgs = <DefaultImg>{
-  ltn: ['/src/assets/img/news-banner/rwd_ltnlogo.png', '自由時報'],
-  military: ['/src/assets/img/news-banner/military_logo.png', '自由時報-軍武專欄'],
-  cna: ['/src/assets/img/news-banner/pic_fb.jpg', '中央社'],
-  udn: ['/src/assets/img/news-banner/聯合新聞網.png', '聯合報'],
+  ltn: [
+    import.meta.env.PROD ? 'assets/rwd_ltnlogo.png' : '/src/assets/img/news-banner/rwd_ltnlogo.png',
+    '自由時報',
+  ],
+  military: [
+    import.meta.env.PROD
+      ? 'assets/military_logo.png'
+      : '/src/assets/img/news-banner/military_logo.png',
+    '自由時報-軍武專欄',
+  ],
+  cna: [
+    import.meta.env.PROD ? 'assets/pic_fb.jpg' : '/src/assets/img/news-banner/pic_fb.jpg',
+    '中央社',
+  ],
+  udn: [
+    import.meta.env.PROD ? 'assets/聯合新聞網.png' : '/src/assets/img/news-banner/聯合新聞網.png',
+    '聯合報',
+  ],
+}
+
+const defaultProdImgs = <DefaultImg>{
+  ltn: ['/assets/rwd_ltnlogo.png', '自由時報'],
+  military: ['/assets/military_logo.png', '自由時報-軍武專欄'],
+  cna: ['/assets/pic_fb.jpg', '中央社'],
+  udn: ['/assets/聯合新聞網.png', '聯合報'],
 }
 
 const renderImg = computed(() => {
@@ -67,6 +80,7 @@ const renderImg = computed(() => {
   return props.img
 })
 
+//處理聯合新聞網
 const renderUrl = computed(() => {
   if (props.source === 'udn') {
     return `https://udn.com${props.url}`
