@@ -45,14 +45,6 @@ import NewsCard from '@/components/ui/newscard/NewsCard.vue'
 import NewsCategory from '@/components/ui/newscategory/NewsCategory.vue'
 import { useNewsStore } from '@/stores/newsStore'
 
-// type NewsType = {
-//   date: string
-//   img: string
-//   source: string
-//   title: string
-//   url: string
-// }
-
 const newsStore = useNewsStore()
 
 const route = useRoute()

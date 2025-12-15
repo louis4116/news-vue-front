@@ -1,37 +1,46 @@
 <template>
   <el-form
-    ref="formRef"
+    ref="my-form"
     label-width="auto"
     :model="formModel"
     :rules="formRule"
     v-loading="loadingState"
   >
-    <el-form-item label="信箱" prop="email">
+    <el-form-item label="信箱" prop="email" data-test="email">
       <el-input v-model="formModel.email" />
     </el-form-item>
-    <el-form-item label="密碼" prop="password">
+    <el-form-item label="密碼" prop="password" data-test="password">
       <el-input v-model="formModel.password" type="password" />
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="submitForm(formRef)" class="m-auto"> 登入 </el-button>
-      <router-link :to="{ name: 'forget' }" class="m-auto"
+      <el-button
+        type="primary"
+        @click="submitForm(formRef)"
+        data-test="login-button"
+        class="m-auto"
+      >
+        登入
+      </el-button>
+      <router-link :to="{ name: 'forget' }" data-test="find-password-button" class="m-auto"
         ><el-button type="info"> 找回密碼 </el-button></router-link
       >
     </el-form-item>
     <el-form-item>
-      <el-button type="info" @click="handleToggle" link> 切換至註冊頁面 </el-button>
+      <el-button type="info" data-test="toggle-button" @click="handleToggle" link>
+        切換至註冊頁面
+      </el-button>
     </el-form-item>
   </el-form>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { ElNotification } from 'element-plus'
+import { ref, useTemplateRef } from 'vue'
+// import { ElNotification } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import { useRouter } from 'vue-router'
-import { useReCaptcha } from 'vue-recaptcha-v3'
+import to from 'await-to-js'
+import { useNotification } from '../composable/useNotification'
 import { useAuthStore } from '@/stores/authStore'
-import { useRecaptchaStore } from '@/stores/recaptchaStore'
 
 type LoginFormType = {
   email: string
@@ -46,7 +55,7 @@ const router = useRouter()
 
 const loadingState = ref(false)
 
-const formRef = ref<FormInstance>()
+const formRef = useTemplateRef<FormInstance>('my-form')
 
 const formModel = ref<LoginFormType>({
   email: '',
@@ -61,34 +70,31 @@ const formRule = ref<FormRules<LoginFormType>>({
   ],
 })
 
-const submitForm = async (formEl: FormInstance | undefined) => {
+const submitForm = async (formEl: FormInstance | null) => {
   if (!formEl || loadingState.value) return
-  await formEl.validate(async (valid) => {
-    if (!valid) return
-    try {
-      loadingState.value = true
-      const result = await authStore.signIn(formModel.value)
-      localStorage.setItem('login-token', result.data.token)
-      authStore.$state.signInStatus = true
-      alert('成功!!')
-      formRef.value?.resetFields()
-      router.push({ name: 'home' })
-    } catch (e: any) {
-      ElNotification.error({
-        type: 'error',
-        title: '失敗',
-        message: e.msg,
-        duration: 3000,
-      })
-    } finally {
-      loadingState.value = false
-    }
-  })
+  loadingState.value = true
+  try {
+    await formEl.validate()
+
+    const result = await authStore.signIn(formModel.value)
+    localStorage.setItem('login-token', result.data.token)
+
+    formRef.value?.resetFields()
+
+    authStore.$state.signInStatus = true
+
+    router.push({ name: 'home' })
+  } catch (e: any) {
+    useNotification('error', '失敗', e)
+  } finally {
+    loadingState.value = false
+  }
 }
 
 const handleToggle = () => {
   emits('handle-toggle')
 }
+defineExpose({ formRef, submitForm, formModel, loadingState })
 </script>
 
 <style scoped>

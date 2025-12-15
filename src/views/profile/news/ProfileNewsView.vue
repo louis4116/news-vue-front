@@ -32,15 +32,8 @@
     >
       <ProfileNewsList
         v-for="(item, index) in sliceNews"
+        v-bind="item"
         :key="item._id"
-        :_id="item._id"
-        :img="item.img"
-        :date="item.date"
-        :source="item.source"
-        :storedDate="item.storedDate"
-        :title="item.title"
-        :url="item.url"
-        :memo="item.memo"
         :data-index="index"
         @handle-loading="handleLoading"
       />
@@ -58,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch, computed, TransitionGroup } from 'vue'
+import { ref, watch, computed } from 'vue'
 import ProfileNewsList from '@/components/profile/profilenews/ProfileNewsList.vue'
 import UserNewsCategory from '@/components/ui/userNewsCategory/UserNewsCategory.vue'
 import CheckSort from '@/components/ui/checksort/CheckSort.vue'

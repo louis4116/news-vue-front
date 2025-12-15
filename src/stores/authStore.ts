@@ -1,6 +1,5 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import axios from 'axios'
 import serverInstance from '@/util/request'
 
 type UserType = {
@@ -24,12 +23,13 @@ export const useAuthStore = defineStore('auth', () => {
   const signInStatus = ref<boolean>(false)
   const userData = ref<UserType | null>(null)
 
-  const status = localStorage.getItem('login-token')
-  if (status) {
-    signInStatus.value = true
-  } else {
-    signInStatus.value = false
-  }
+  // const token = localStorage.getItem('login-token')
+  // if (status) {
+  //   signInStatus.value = true
+  // } else {
+  //   signInStatus.value = false
+  // }
+  signInStatus.value = localStorage.getItem('login-token') !== null
   async function signUp(data: any) {
     const result = await serverInstance({
       url: 'user/register',
@@ -116,6 +116,17 @@ export const useAuthStore = defineStore('auth', () => {
     return result
   }
 
+  async function unLoginResetPassword(id: string, password: string) {
+    const result = await serverInstance({
+      url: `user/resetPassword/${id}`,
+      method: 'patch',
+      data: {
+        password,
+      },
+    })
+    return result
+  }
+
   return {
     authToken,
     signInStatus,
@@ -127,5 +138,6 @@ export const useAuthStore = defineStore('auth', () => {
     resetPassword,
     getMe,
     updateAvatar,
+    unLoginResetPassword,
   }
 })

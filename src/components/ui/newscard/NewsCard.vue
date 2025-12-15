@@ -66,13 +66,6 @@ const defaultImgs = <DefaultImg>{
   ],
 }
 
-const defaultProdImgs = <DefaultImg>{
-  ltn: ['/assets/rwd_ltnlogo.png', '自由時報'],
-  military: ['/assets/military_logo.png', '自由時報-軍武專欄'],
-  cna: ['/assets/pic_fb.jpg', '中央社'],
-  udn: ['/assets/聯合新聞網.png', '聯合報'],
-}
-
 const renderImg = computed(() => {
   if (!props.img) {
     return defaultImgs[props.source][0]
@@ -97,6 +90,7 @@ const storeData = async () => {
   try {
     await newStore.storeNews({
       id: authStore.userData?._id,
+      // ...props
       date: props.date,
       url: props.url,
       img: props.img,

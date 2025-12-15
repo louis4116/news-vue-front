@@ -23,6 +23,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { FormInstance, FormRules } from 'element-plus'
+import { ElNotification } from 'element-plus'
 import { useAuthStore } from '@/stores/authStore'
 
 type ResetFormType = {
@@ -46,9 +47,18 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   await formEl.validate(async (valid) => {
     if (!valid) return
     try {
-      const result = await authStore.resetEmail(formModel.value.email)
+      await authStore.resetEmail(formModel.value.email)
+      ElNotification({
+        title: '成功',
+        message: '已寄出',
+        type: 'success',
+      })
     } catch (error) {
-      console.log(error)
+      ElNotification({
+        title: '錯誤',
+        message: '寄出失敗',
+        type: 'error',
+      })
     }
   })
 }

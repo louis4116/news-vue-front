@@ -1,16 +1,5 @@
 <template>
   <div class="profile-summary flex flex-col items-center justify-center" v-loading="loadingState">
-    <!-- <div class="flex flex-col items-center justify-center mt-2">
-      <el-avatar :src="renderAvatar" :size="200" />
-      <el-upload
-        :show-file-list="false"
-        :auto-upload="false"
-        action="#"
-        :on-change="(files: UploadFile) => handleChange(files)"
-        ><el-button class="mt-6">修改</el-button></el-upload
-      >
-      <el-button class="mt-6" v-if="isShowButton" @click="uploadAvatar">上傳</el-button>
-    </div> -->
     <ul class="w-full md:w-[75%] flex flex-col items-center justify-start mb-2 mt-10">
       <li class="w-full flex items-center justify-start text-xl mb-4 gap-2">
         <div>暱稱:</div>
@@ -26,18 +15,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed, onMounted } from 'vue'
+import { ref, watch, computed } from 'vue'
 import type { UploadFile } from 'element-plus'
 import ProfileInfForm from '@/components/profile/profileinf/ProfileInfForm.vue'
 import { useAuthStore } from '@/stores/authStore'
 
-type Profile = {
-  avatar: string
-  email: string
-  name: string
-  news: []
-  _id: string
-}
+// type Profile = {
+//   avatar: string
+//   email: string
+//   name: string
+//   news: []
+//   _id: string
+// }
 
 const props = defineProps(['profile'])
 

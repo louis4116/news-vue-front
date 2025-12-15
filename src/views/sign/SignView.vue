@@ -11,9 +11,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import SignUp from '@/components/sign/SignUp.vue'
+import { ref, defineAsyncComponent } from 'vue'
 import SignIn from '@/components/sign/SignIn.vue'
+
+const SignUp = defineAsyncComponent(() => import('@/components/sign/SignUp.vue'))
 
 const toggle = ref(true)
 
