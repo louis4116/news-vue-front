@@ -35,3 +35,5 @@ coverage
 *.test.ts
 
 *.tsbuildinfo
+
+/__tests__

@@ -80,7 +80,6 @@ const deleteData = () => {
     type: 'warning',
   })
     .then(() => {
-      emits('handle-loading', true)
       if (props._id) {
         newStore.deleteNews({ _id: props._id })
         ElMessage({
@@ -95,9 +94,6 @@ const deleteData = () => {
         type: action === 'cancel' ? 'info' : 'error',
         message: action === 'cancel' ? '取消' : '錯誤',
       })
-    })
-    .finally(() => {
-      emits('handle-loading', false)
     })
 }
 

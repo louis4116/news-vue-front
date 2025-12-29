@@ -2,13 +2,7 @@
   <div class="w-full">
     <div class="w-full flex items-center justify-center my-4">
       <div class="w-[50%]">
-        <el-input
-          v-model="inputModel"
-          maxlength="20"
-          type="text"
-          placeholder="搜尋"
-          @input="searchNews"
-        />
+        <el-input v-model="inputModel" maxlength="20" type="text" placeholder="搜尋" />
       </div>
     </div>
     <div class="w-full flex items-center justify-center py-2 mb-4 flex-wrap">
@@ -23,19 +17,18 @@
         />
         <CheckSort :newsItem="sliceNews" :dateToggle="dateToggle" @date-click="dateClick" />
       </ul>
-      <DatePicker @date-pick="datePick" />
+      <DatePicker @date-pick="datePick" v-if="sliceNews.length" />
     </div>
 
     <div
       class="news-list-container items-center justify-center flex-col overflow-hidden"
-      v-loading="loadingState"
+      v-if="sliceNews.length"
     >
       <ProfileNewsList
         v-for="(item, index) in sliceNews"
         v-bind="item"
         :key="item._id"
         :data-index="index"
-        @handle-loading="handleLoading"
       />
       <el-pagination
         class="justify-center mt-8"
@@ -47,16 +40,17 @@
         v-model:current-page="currentPage"
       />
     </div>
+    <el-empty description="無資料" v-else />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
+import { refDebounced } from '@vueuse/core'
 import ProfileNewsList from '@/components/profile/profilenews/ProfileNewsList.vue'
 import UserNewsCategory from '@/components/ui/userNewsCategory/UserNewsCategory.vue'
 import CheckSort from '@/components/ui/checksort/CheckSort.vue'
 import DatePicker from '@/components/date/DatePicker.vue'
-import { useDebounce } from '@/components/composable/useDebounce'
 
 type ProfileNews = {
   _id: string
@@ -90,51 +84,53 @@ const category = [
 
 const props = defineProps(['profile'])
 
-const newItems = ref<
-  | {
-      _id: string
-      img: string
-      date: string
-      source: string
-      storedDate: string
-      title: string
-      url: string
-      memo: string
-    }[]
-  | null
->(null)
-
 const activeTag = ref('ltn')
 
 const inputModel = ref('')
 
+const inputDebounced = refDebounced(inputModel, 300)
+
 const dateToggle = ref(false)
+
+const dateRange = ref({
+  start: 0,
+  end: Date.parse(new Date().toString()),
+})
 
 //當前頁面
 const currentPage = ref(1)
 
-const loadingState = ref(true)
+//顯示的新聞
+const allNews = computed(() => {
+  if (!props.profile?.news) return []
+  return props.profile?.news.filter((item: ProfileNews) => {
+    const tempDate = Date.parse(item.storedDate)
+    const searchInput = inputDebounced.value.toLowerCase().trim()
+    return (
+      item.source === activeTag.value &&
+      item.title.toLowerCase().includes(searchInput) &&
+      dateRange.value.start < tempDate &&
+      dateRange.value.end > tempDate
+    )
+  })
+})
 
-const searchNews = useDebounce(() => {
-  const nowTagNews = filterData(activeTag.value)
-  const result = nowTagNews?.filter((item: ProfileNews) => item.title.includes(inputModel.value))
-  if (result) {
-    newItems.value = result
-  }
-}, 300)
+//每頁數量
+const sliceNews = computed(() => {
+  if (!allNews.value) return
+  const pageSize = 10
+  const start = (currentPage.value - 1) * pageSize
+  const end = start + pageSize
+  return allNews.value.slice(start, end)
+})
+
+//新聞總數量
+const totalNumber = computed(() => {
+  return allNews.value.length
+})
 
 const navClick = (val: string) => {
   activeTag.value = val
-  const result = filterData(activeTag.value)
-  if (result) {
-    newItems.value = result
-    dateToggle.value = false
-  }
-}
-
-const filterData = (val: string) => {
-  const result = props.profile?.news.filter((item: ProfileNews) => item.source === val)
-  return result
 }
 
 const dateClick = () => {
@@ -142,47 +138,26 @@ const dateClick = () => {
 }
 
 const datePick = (start: string, end: string) => {
-  const startParse = Date.parse(start)
-  const endParse = Date.parse(end) + 86400000
-
-  const newsData = filterData(activeTag.value)
-
-  const result = newsData.filter((item: ProfileNews) => {
-    const tempDate = Date.parse(item.storedDate)
-    return startParse < tempDate && tempDate < endParse
-  })
-  newItems.value = result
-}
-
-const sliceNews = computed(() => {
-  if (!newItems.value) return
-  //每頁數量
-  const pageSize = 10
-  const start = (currentPage.value - 1) * pageSize
-  const end = start + pageSize
-  return newItems.value.slice(start, end)
-})
-
-const totalNumber = computed(() => {
-  return newItems.value ? newItems.value.length : 0
-})
-
-const handleLoading = (val: boolean) => {
-  loadingState.value = val
-}
-
-watch(
-  () => props.profile,
-  () => {
-    const result = filterData(activeTag.value)
-    newItems.value = result
-  },
-)
-
-watch(sliceNews, (newValue) => {
-  if (newValue) {
-    loadingState.value = false
+  dateRange.value = {
+    start: Date.parse(start),
+    end: Date.parse(end) + 86400000,
   }
+}
+
+//條件變更後重製起始頁面
+watch([inputDebounced, dateRange], () => {
+  currentPage.value = 1
+})
+
+//標籤變換後重製狀態
+watch([activeTag], () => {
+  inputModel.value = ''
+  dateRange.value = {
+    start: 0,
+    end: Date.parse(new Date().toString()),
+  }
+  dateToggle.value = false
+  currentPage.value = 1
 })
 </script>
 

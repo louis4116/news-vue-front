@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, computed, watch, onMounted, onUpdated } from 'vue'
 import { useRoute } from 'vue-router'
 import { faPen } from '@fortawesome/free-solid-svg-icons'
 import { useAuthStore } from '@/stores/authStore'
@@ -90,6 +90,10 @@ watch(
 
 onMounted(() => {
   getUser()
+})
+
+onUpdated(() => {
+  console.log('update')
 })
 </script>
 

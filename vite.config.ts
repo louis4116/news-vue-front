@@ -19,11 +19,6 @@ export default defineConfig({
         manualChunks: {
           vendor: ['vue', 'vue-router'],
           ui: ['element-plus'],
-          profile: [
-            './src/views/profile/ProfileView.vue',
-            './src/views/profile/news/ProfileNewsView.vue',
-            './src/views/profile/inf/ProfileInfView.vue',
-          ],
         },
       },
     },
