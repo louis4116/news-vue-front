@@ -23,12 +23,6 @@ export const useAuthStore = defineStore('auth', () => {
   const signInStatus = ref<boolean>(false)
   const userData = ref<UserType | null>(null)
 
-  // const token = localStorage.getItem('login-token')
-  // if (status) {
-  //   signInStatus.value = true
-  // } else {
-  //   signInStatus.value = false
-  // }
   signInStatus.value = localStorage.getItem('login-token') !== null
   async function signUp(data: any) {
     const result = await serverInstance({

@@ -41,7 +41,7 @@ onMounted(() => {
         <el-icon :color="is_show ? '#ffffff' : '#409efc'" :size="32"><Menu /></el-icon>
       </div>
     </el-aside>
-    <el-main class="h-[100vh] md:ml-[128px]">
+    <el-main class="h-[100vh] md:ml-[128px] p-0!">
       <RouterView :key="globalStore.routeKey" />
     </el-main>
     <Transition name="fade">

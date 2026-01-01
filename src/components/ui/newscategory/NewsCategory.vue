@@ -1,5 +1,5 @@
 <template>
-  <ul class="news-category flex items-center justify-center gap-5 md:gap-10 flex-wrap">
+  <ul class="news-category flex-center gap-x-5 gap-y-5 md:gap-x-10 flex-wrap">
     <li v-for="item in categortArray?.content" :key="item.url" @click="getUrl(item.url)">
       <el-button type="info" :plain="item.url === activeUrl">{{ item.name }}</el-button>
     </li>

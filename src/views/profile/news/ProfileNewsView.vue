@@ -1,12 +1,12 @@
 <template>
   <div class="w-full">
-    <div class="w-full flex items-center justify-center my-4">
+    <div class="w-full flex-center my-4">
       <div class="w-[50%]">
         <el-input v-model="inputModel" maxlength="20" type="text" placeholder="搜尋" />
       </div>
     </div>
-    <div class="w-full flex items-center justify-center py-2 mb-4 flex-wrap">
-      <ul class="w-full flex items-center justify-center py-2 mb-4 flex-wrap">
+    <div class="w-full flex-center py-2 mb-4 flex-wrap">
+      <ul class="w-full flex-center py-2 mb-4 flex-wrap">
         <UserNewsCategory
           v-for="item in category"
           :key="item.cate"

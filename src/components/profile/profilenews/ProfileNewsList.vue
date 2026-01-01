@@ -1,14 +1,12 @@
 <template>
   <div class="profile-newlist w-full flex items-center md:flex-row flex-col p-2" ref="listRef">
     <div
-      class="profile-newlist-img flex items-center justify-center w-3xs h-[170px] mb-6 md:mb-0 overflow-hidden cursor-pointer"
+      class="profile-newlist-img flex-center w-3xs h-[170px] mb-6 md:mb-0 overflow-hidden cursor-pointer"
       @click="navToSourceNew"
     >
       <el-image class="w-full h-full object-cover" :src="renderImg" fit="cover">
         <template #error>
-          <div
-            class="w-full h-full flex items-center justify-center text-3xl bg-[rgba(0,0,0,0.25)]"
-          >
+          <div class="w-full h-full flex-center text-3xl bg-[rgba(0,0,0,0.25)]">
             <el-icon><icon-picture /></el-icon></div></template
       ></el-image>
     </div>

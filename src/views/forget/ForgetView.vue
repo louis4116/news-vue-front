@@ -6,7 +6,7 @@
           <el-input v-model="formModel.email" />
         </el-form-item>
         <el-form-item>
-          <div class="flex items-center justify-center w-full">
+          <div class="flex-center w-full">
             <el-button type="info" @click="submitForm(formRef)"> 送出 </el-button>
           </div>
         </el-form-item>

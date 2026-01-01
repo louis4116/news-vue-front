@@ -20,14 +20,6 @@ import type { UploadFile } from 'element-plus'
 import ProfileInfForm from '@/components/profile/profileinf/ProfileInfForm.vue'
 import { useAuthStore } from '@/stores/authStore'
 
-// type Profile = {
-//   avatar: string
-//   email: string
-//   name: string
-//   news: []
-//   _id: string
-// }
-
 const props = defineProps(['profile'])
 
 const defaultAvatar = ref<string | null>(null)
@@ -37,13 +29,6 @@ const isShowButton = ref(false)
 const loadingState = ref(true)
 
 const authStore = useAuthStore()
-
-const renderAvatar = computed(() => {
-  defaultAvatar.value = props.profile?.avatar
-  return defaultAvatar.value
-    ? defaultAvatar.value
-    : new URL('@/assets/img/profile/Profile.jpg', import.meta.url).href
-})
 
 function useBase64(file: any) {
   //將圖片轉為base64字串

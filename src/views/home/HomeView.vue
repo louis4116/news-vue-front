@@ -18,7 +18,7 @@ onMounted(() => {
 
 <template>
   <el-container>
-    <el-header height="auto">
+    <el-header height="auto" class="p-0!">
       <NavBar />
     </el-header>
     <el-main>

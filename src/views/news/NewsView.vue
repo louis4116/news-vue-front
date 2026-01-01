@@ -1,17 +1,17 @@
 <template>
   <el-container class="h-full">
-    <el-header height="auto">
+    <el-header height="auto" class="border-[rgba(0,0,0,0.15)] p-0!">
       <NavBar />
     </el-header>
     <el-main class="h-[85%]">
       <div class="flex flex-col justify-center items-center gap-6 mb-5">
         <NewsCategory :routeId="routeId" @init-page="initPage" />
         <div
-          class="flex items-center justify-center flex-col w-full"
+          class="flex-center flex-col w-full"
           v-loading="loadingState"
           element-loading-text="資料讀取中。。。"
         >
-          <div class="flex items-center justify-center overflow-hidden">
+          <div class="flex-center">
             <el-row :gutter="40" justify="center">
               <NewsCard
                 v-for="item in sliceNews"

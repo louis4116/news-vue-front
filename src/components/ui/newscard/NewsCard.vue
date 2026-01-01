@@ -1,11 +1,12 @@
 <template>
   <el-col :span="12" :xs="18" :lg="8" class="mb-5">
-    <el-card>
+    <el-card shadow="hover">
       <template #header>
         <div class="flex items-center justify-between">
           <h2 class="home-card-header line-base-set">{{ renderTitle }}</h2>
-          <el-button @click="storeData" v-if="authStore.userData?._id"
-            ><el-icon><Plus /></el-icon
+          <el-button :shouldAddSpace="true" @click="storeData" v-if="authStore.userData?._id"
+            ><p>收藏</p>
+            <el-icon><Plus /></el-icon
           ></el-button>
         </div>
       </template>
@@ -115,6 +116,10 @@ const storeData = async () => {
 </script>
 
 <style scoped>
+:deep(.el-card:hover) {
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+  transform: translateY(-0.1rem);
+}
 :deep(.el-card__footer) {
   display: flex;
   justify-content: flex-end;
