@@ -30,6 +30,10 @@ import { computed } from 'vue'
 import { ElNotification } from 'element-plus'
 import { useAuthStore } from '@/stores/authStore'
 import { useNewsStore } from '@/stores/newsStore'
+import ltnLogo from '@/assets/img/news-banner/rwd_ltnlogo.png'
+import militaryLogo from '@/assets/img/news-banner/military_logo.png'
+import cnaLogo from '@/assets/img/news-banner/pic_fb.jpg'
+import udnLogo from '@/assets/img/news-banner/聯合新聞網.png'
 
 type DefaultImg = {
   [key: string]: string[]
@@ -47,24 +51,13 @@ const props = defineProps({
 })
 
 const defaultImgs = <DefaultImg>{
-  ltn: [
-    import.meta.env.PROD ? 'assets/rwd_ltnlogo.png' : '/src/assets/img/news-banner/rwd_ltnlogo.png',
-    '自由時報',
-  ],
+  ltn: [import.meta.env.PROD ? ltnLogo : '/src/assets/img/news-banner/rwd_ltnlogo.png', '自由時報'],
   military: [
-    import.meta.env.PROD
-      ? 'assets/military_logo.png'
-      : '/src/assets/img/news-banner/military_logo.png',
+    import.meta.env.PROD ? militaryLogo : '/src/assets/img/news-banner/military_logo.png',
     '自由時報-軍武專欄',
   ],
-  cna: [
-    import.meta.env.PROD ? 'assets/pic_fb.jpg' : '/src/assets/img/news-banner/pic_fb.jpg',
-    '中央社',
-  ],
-  udn: [
-    import.meta.env.PROD ? 'assets/聯合新聞網.png' : '/src/assets/img/news-banner/聯合新聞網.png',
-    '聯合報',
-  ],
+  cna: [import.meta.env.PROD ? cnaLogo : '/src/assets/img/news-banner/pic_fb.jpg', '中央社'],
+  udn: [import.meta.env.PROD ? udnLogo : '/src/assets/img/news-banner/聯合新聞網.png', '聯合報'],
 }
 
 const renderImg = computed(() => {

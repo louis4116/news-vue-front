@@ -14,6 +14,7 @@ const serverInstance = axios.create({
 serverInstance.interceptors.request.use((config) => {
   const status = localStorage.getItem('login-token')
   config.headers.Authorization = `Bearer ${status}`
+  config.withCredentials = true
   return config
 })
 

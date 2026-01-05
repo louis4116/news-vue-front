@@ -35,7 +35,6 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox, ElNotification, type Action } from 'element-plus'
 import { Picture as IconPicture } from '@element-plus/icons-vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'

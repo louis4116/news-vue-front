@@ -44,23 +44,21 @@ const formRule = ref<FormRules<ResetFormType>>({
 
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
-  await formEl.validate(async (valid) => {
-    if (!valid) return
-    try {
-      await authStore.resetEmail(formModel.value.email)
-      ElNotification({
-        title: '成功',
-        message: '已寄出',
-        type: 'success',
-      })
-    } catch (error) {
-      ElNotification({
-        title: '錯誤',
-        message: '寄出失敗',
-        type: 'error',
-      })
-    }
-  })
+  try {
+    await formEl.validate()
+    await authStore.resetEmail(formModel.value.email)
+    ElNotification({
+      title: '成功',
+      message: '已寄出',
+      type: 'success',
+    })
+  } catch (e) {
+    ElNotification({
+      title: '錯誤',
+      message: '寄出失敗',
+      type: 'error',
+    })
+  }
 }
 </script>
 
