@@ -84,12 +84,7 @@ const storeData = async () => {
   try {
     await newStore.storeNews({
       id: authStore.userData?._id,
-      // ...props
-      date: props.date,
-      url: props.url,
-      img: props.img,
-      source: props.source,
-      title: props.title,
+      ...props,
     })
     ElNotification({
       type: 'success',

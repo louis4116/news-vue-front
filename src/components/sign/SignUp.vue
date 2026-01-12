@@ -86,22 +86,36 @@ const formRule = ref<FormRules<FormType>>({
 
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl || loadingState.value) return
-  await formEl.validate(async (valid) => {
-    if (!valid) return
+  try {
+    await formEl.validate()
     loadingState.value = true
-    try {
-      await authSt.signUp(formModel.value)
-      formRef.value?.resetFields()
-      alert('註冊成功')
-    } catch (e: any) {
-      ElNotification.error({
-        title: '失敗',
-        message: e.response.data,
-      })
-    } finally {
-      loadingState.value = false
-    }
-  })
+    await authSt.signUp(formModel.value)
+    formRef.value?.resetFields()
+    alert('註冊成功')
+  } catch (e: any) {
+    ElNotification.error({
+      title: '失敗',
+      message: e?.response.data,
+    })
+  } finally {
+    loadingState.value = false
+  }
+  // await formEl.validate(async (valid) => {
+  //   if (!valid) return
+  //   loadingState.value = true
+  //   try {
+  //     await authSt.signUp(formModel.value)
+  //     formRef.value?.resetFields()
+  //     alert('註冊成功')
+  //   } catch (e: any) {
+  //     ElNotification.error({
+  //       title: '失敗',
+  //       message: e.response.data,
+  //     })
+  //   } finally {
+  //     loadingState.value = false
+  //   }
+  // })
 }
 
 const resetForm = () => {

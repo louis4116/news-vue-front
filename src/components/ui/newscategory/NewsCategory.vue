@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch } from 'vue'
 import { ElNotification } from 'element-plus'
 import { useNewsStore } from '@/stores/newsStore'
 import { categoryData } from './newsCategoryData'
@@ -65,8 +65,6 @@ watch(
     findCategory()
   },
 )
-
-onMounted(() => {})
 </script>
 
 <style scoped></style>

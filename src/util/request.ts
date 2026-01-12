@@ -11,13 +11,14 @@ const serverInstance = axios.create({
   baseURL: getBaseURL(),
 })
 
+//請求
 serverInstance.interceptors.request.use((config) => {
   const status = localStorage.getItem('login-token')
   config.headers.Authorization = `Bearer ${status}`
-  config.withCredentials = true
   return config
 })
 
+//回傳
 serverInstance.interceptors.response.use(
   (response) => {
     const { status } = response

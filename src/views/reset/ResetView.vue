@@ -51,33 +51,57 @@ const formRule = ref<FormRules<FormType>>({
 
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
-  await formEl.validate(async (valid) => {
-    if (!valid) return
-    try {
-      loadingState.value = true
-      if (routeId.value) {
-        await authStore.unLoginResetPassword(routeId.value, formModel.value.password)
-        formRef.value?.resetFields()
-        ElNotification({
-          title: '成功',
-          message: '修改成功，稍後移至登入頁面',
-          type: 'success',
-          duration: 3000,
-          onClose: () => {
-            router.push({ name: 'sign' })
-          },
-        })
-      }
-    } catch (error: any) {
+  try {
+    loadingState.value = true
+    if (routeId.value) {
+      await authStore.unLoginResetPassword(routeId.value, formModel.value.password)
+      formRef.value?.resetFields()
       ElNotification({
-        title: '錯誤',
-        message: '修改失敗',
-        type: 'error',
+        title: '成功',
+        message: '修改成功，稍後移至登入頁面',
+        type: 'success',
+        duration: 3000,
+        onClose: () => {
+          router.push({ name: 'sign' })
+        },
       })
-    } finally {
-      loadingState.value = false
     }
-  })
+  } catch (error: any) {
+    ElNotification({
+      title: '錯誤',
+      message: '修改失敗',
+      type: 'error',
+    })
+  } finally {
+    loadingState.value = false
+  }
+  // await formEl.validate(async (valid) => {
+  //   if (!valid) return
+  //   try {
+  //     loadingState.value = true
+  //     if (routeId.value) {
+  //       await authStore.unLoginResetPassword(routeId.value, formModel.value.password)
+  //       formRef.value?.resetFields()
+  //       ElNotification({
+  //         title: '成功',
+  //         message: '修改成功，稍後移至登入頁面',
+  //         type: 'success',
+  //         duration: 3000,
+  //         onClose: () => {
+  //           router.push({ name: 'sign' })
+  //         },
+  //       })
+  //     }
+  //   } catch (error: any) {
+  //     ElNotification({
+  //       title: '錯誤',
+  //       message: '修改失敗',
+  //       type: 'error',
+  //     })
+  //   } finally {
+  //     loadingState.value = false
+  //   }
+  // })
 }
 
 onMounted(() => {

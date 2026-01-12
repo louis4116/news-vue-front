@@ -2,7 +2,7 @@
   <el-container class="h-full overflow-hidden">
     <el-header class="flex items-center text-3xl border-b md:pl-12">個人檔案</el-header>
     <el-container :direction="directionMain" class="h-full">
-      <el-aside :width="asideWidth" class="h-full">
+      <el-aside :width="asideWidth" class="h-auto">
         <el-menu class="h-full" :router="true" :default-active="defaultActive">
           <el-menu-item index="profile" :route="{ name: 'profile' }">
             <FontAwesomeIcon :icon="faPen" class="mr-2" />
@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, onUpdated } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { faPen } from '@fortawesome/free-solid-svg-icons'
 import { useAuthStore } from '@/stores/authStore'
@@ -90,10 +90,6 @@ watch(
 
 onMounted(() => {
   getUser()
-})
-
-onUpdated(() => {
-  console.log('update')
 })
 </script>
 

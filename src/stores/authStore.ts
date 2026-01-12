@@ -64,7 +64,6 @@ export const useAuthStore = defineStore('auth', () => {
     oldPassword: string
     newPassword: string
   }) {
-    const status = localStorage.getItem('login-token')
     const result = await serverInstance({
       url: `user/loginUserReset/${id}`,
       method: 'patch',
@@ -77,8 +76,6 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function getMe() {
-    const status = localStorage.getItem('login-token')
-    if (!status) return
     const result = await serverInstance({
       url: 'user/me',
       method: 'get',
@@ -87,7 +84,6 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function updateAvatar({ id, avatar }: { id: string; avatar: string }) {
-    const status = localStorage.getItem('login-token')
     const result = await serverInstance({
       url: `user/uploadImg/${id}`,
       method: 'patch',

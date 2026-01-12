@@ -1,28 +1,16 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { RouterView } from 'vue-router'
 import Sidebar from './components/sidebar/Sidebar.vue'
-import { useAuthStore } from '@/stores/authStore'
 import { useGlobalStore } from './stores/globalStore'
 
-const authStore = useAuthStore()
-
 const globalStore = useGlobalStore()
-
 const is_show = ref(false)
-
-const getUser = async () => {
-  await authStore.getMe()
-}
 
 const showClick = (val?: boolean) => {
   if (val) return (is_show.value = val)
   is_show.value = !is_show.value
 }
-
-onMounted(() => {
-  getUser()
-})
 </script>
 
 <template>

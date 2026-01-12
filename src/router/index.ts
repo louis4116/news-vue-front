@@ -1,12 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import NewsView from '@/views/news/NewsView.vue'
-import SignView from '@/views/sign/SignView.vue'
-import ProfileView from '@/views/profile/ProfileView.vue'
-import ProfileInfView from '@/views/profile/inf/ProfileInfView.vue'
-import ProfileNewsView from '@/views/profile/news/ProfileNewsView.vue'
-import SignOutView from '@/views/sign/SignOutView.vue'
-import ForgetView from '@/views/forget/ForgetView.vue'
-import ResetView from '@/views/reset/ResetView.vue'
 
 import { useAuthStore } from '@/stores/authStore'
 

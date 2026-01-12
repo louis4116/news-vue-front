@@ -46,7 +46,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   try {
     await formEl.validate()
-    await authStore.resetEmail(formModel.value.email)
+    const result = await authStore.resetEmail(formModel.value.email)
     ElNotification({
       title: '成功',
       message: '已寄出',

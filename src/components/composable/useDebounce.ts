@@ -1,6 +1,6 @@
-export function useDebounce<T extends (...args: any) => any>(fn: T, delay: number = 500) {
-  let timer: any
-  return (...args: any[]) => {
+export function useDebounce<T extends unknown[]>(fn: (...args: T) => void, delay: number = 500) {
+  let timer: ReturnType<typeof setTimeout>
+  return (...args: T) => {
     clearTimeout(timer)
     timer = setTimeout(() => {
       fn(...args)

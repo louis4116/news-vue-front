@@ -2,17 +2,17 @@
 import { onMounted } from 'vue'
 import NavBar from '@/components/navbar/NavBar.vue'
 import HomeCard from '@/components/homecard/HomeCard.vue'
-import { newsIntroduction } from './homeData'
 import { useAuthStore } from '@/stores/authStore'
+import { newsIntroduction } from './homeData'
 
 const authStore = useAuthStore()
 
-const getUser = async () => {
+const getMe = async () => {
   await authStore.getMe()
 }
 
 onMounted(() => {
-  getUser()
+  getMe()
 })
 </script>
 

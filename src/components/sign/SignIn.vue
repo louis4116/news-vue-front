@@ -38,7 +38,6 @@ import { ref, useTemplateRef } from 'vue'
 // import { ElNotification } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import { useRouter } from 'vue-router'
-import to from 'await-to-js'
 import { useNotification } from '../composable/useNotification'
 import { useAuthStore } from '@/stores/authStore'
 
@@ -85,7 +84,7 @@ const submitForm = async (formEl: FormInstance | null) => {
 
     router.push({ name: 'home' })
   } catch (e: any) {
-    useNotification('error', '失敗', e)
+    useNotification('error', '失敗', '錯誤')
   } finally {
     loadingState.value = false
   }

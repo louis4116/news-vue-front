@@ -35,7 +35,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { ElMessage, ElMessageBox, ElNotification, type Action } from 'element-plus'
+import { ElMessage, ElMessageBox, ElNotification } from 'element-plus'
 import { Picture as IconPicture } from '@element-plus/icons-vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faDeleteLeft } from '@fortawesome/free-solid-svg-icons'
@@ -70,28 +70,27 @@ const formModel = ref({
   memo: props.memo ? props.memo : '',
 })
 
-const deleteData = () => {
-  ElMessageBox.confirm('確定刪除?', '警告', {
-    confirmButtonText: 'OK',
-    cancelButtonText: 'Cancel',
-    type: 'warning',
-  })
-    .then(() => {
-      if (props._id) {
-        newStore.deleteNews({ _id: props._id })
-        ElMessage({
-          type: 'success',
-          message: '刪除成功',
-        })
-        globalStore.routeKey++
-      }
+const deleteData = async () => {
+  try {
+    await ElMessageBox.confirm('確定刪除?', '警告', {
+      confirmButtonText: 'OK',
+      cancelButtonText: 'Cancel',
+      type: 'warning',
     })
-    .catch((action: Action) => {
+    if (props._id) {
+      await newStore.deleteNews({ _id: props._id })
       ElMessage({
-        type: action === 'cancel' ? 'info' : 'error',
-        message: action === 'cancel' ? '取消' : '錯誤',
+        type: 'success',
+        message: '刪除成功',
       })
+      globalStore.routeKey++
+    }
+  } catch (action: any) {
+    ElMessage({
+      type: action === 'cancel' ? 'info' : 'error',
+      message: action === 'cancel' ? '取消' : '錯誤',
     })
+  }
 }
 
 const handleSubmit = async () => {
