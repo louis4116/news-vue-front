@@ -35,6 +35,8 @@ jobs:
       - name: Install
         run: npm ci
       - name: Build
+        env:
+          VITE_CLIENT_URL: ${{ secrets.VITE_CLIENT_URL }}
         run: npm run build
       - name: Upload
         uses: actions/upload-pages-artifact@v3

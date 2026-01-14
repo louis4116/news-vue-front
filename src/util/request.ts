@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const getBaseURL = (): string => {
   if (import.meta.env.PROD) {
-    return 'https://news-ecru-iota.vercel.app/'
+    return import.meta.env.VITE_CLIENT_URL
   }
   return 'http://127.0.0.1:8080/'
 }
