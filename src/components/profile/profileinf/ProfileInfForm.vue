@@ -47,8 +47,6 @@ const formModel = ref({
 
 const msg = ref<string | null>(null)
 
-const buttonLoading = ref(false)
-
 const confrimPassword = (rule: any, value: any, callback: any) => {
   if (formModel.value.password !== value) {
     callback(new Error('輸入密碼不一致'))

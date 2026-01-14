@@ -83,7 +83,7 @@ const submitForm = async (formEl: FormInstance | null) => {
     authStore.$state.signInStatus = true
 
     router.push({ name: 'home' })
-  } catch (e: any) {
+  } catch (error: any) {
     useNotification('error', '失敗', '錯誤')
   } finally {
     loadingState.value = false
