@@ -28,13 +28,14 @@
         v-for="(item, index) in sliceNews"
         v-bind="item"
         :key="item._id"
+        @deleted="handleDelete"
         :data-index="index"
       />
       <el-pagination
         class="justify-center mt-8"
         background
         layout="prev, pager, next"
-        :page-size="10"
+        :page-size="PAGE_SIZE"
         :pager-count="7"
         :total="totalNumber"
         v-model:current-page="currentPage"
@@ -63,6 +64,19 @@ type ProfileNews = {
   memo: string
 }
 
+type Profile = {
+  news: ProfileNews[]
+} | null
+
+const PAGE_SIZE = 10
+const ONE_DAY_MS = 86400000
+
+const props = defineProps<{
+  profile: Profile
+}>()
+
+const emits = defineEmits(['refresh-data'])
+
 const category = [
   {
     name: '自由時報',
@@ -81,8 +95,6 @@ const category = [
     cate: 'udn',
   },
 ]
-
-const props = defineProps(['profile'])
 
 const activeTag = ref('ltn')
 
@@ -117,10 +129,8 @@ const allNews = computed(() => {
 
 //每頁數量
 const sliceNews = computed(() => {
-  if (!allNews.value) return
-  const pageSize = 10
-  const start = (currentPage.value - 1) * pageSize
-  const end = start + pageSize
+  const start = (currentPage.value - 1) * PAGE_SIZE
+  const end = start + PAGE_SIZE
   return allNews.value.slice(start, end)
 })
 
@@ -140,8 +150,13 @@ const dateClick = () => {
 const datePick = (start: string, end: string) => {
   dateRange.value = {
     start: Date.parse(start),
-    end: Date.parse(end) + 86400000,
+    end: Date.parse(end) + ONE_DAY_MS,
   }
+}
+
+const handleDelete = () => {
+  // 向最上層的 ProfileView 發出事件，以刷新所有資料
+  emits('refresh-data')
 }
 
 //條件變更後重製起始頁面

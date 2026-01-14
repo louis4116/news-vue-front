@@ -1,5 +1,5 @@
 <template>
-  <div class="profile-newlist w-full flex items-center md:flex-row flex-col p-2" ref="listRef">
+  <div class="profile-newlist w-full flex items-center md:flex-row flex-col p-2">
     <div
       class="profile-newlist-img flex-center w-3xs h-[170px] mb-6 md:mb-0 overflow-hidden cursor-pointer"
       @click="navToSourceNew"
@@ -34,13 +34,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { ElMessage, ElMessageBox, ElNotification } from 'element-plus'
 import { Picture as IconPicture } from '@element-plus/icons-vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faDeleteLeft } from '@fortawesome/free-solid-svg-icons'
 import { useNewsStore } from '@/stores/newsStore'
-import { useGlobalStore } from '@/stores/globalStore'
 
 const defaultImage = new Map([
   ['ltn', new URL('@/assets/img/news-banner/rwd_ltnlogo.png', import.meta.url).href],
@@ -49,11 +48,9 @@ const defaultImage = new Map([
   ['udn', new URL('@/assets/img/news-banner/聯合新聞網.png', import.meta.url).href],
 ])
 
-const emits = defineEmits(['handle-loading'])
+const emits = defineEmits(['handle-loading', 'deleted'])
 
 const newStore = useNewsStore()
-
-const globalStore = useGlobalStore()
 
 const props = defineProps({
   _id: String,
@@ -67,8 +64,15 @@ const props = defineProps({
 })
 
 const formModel = ref({
-  memo: props.memo ? props.memo : '',
+  memo: props.memo ?? '',
 })
+
+watch(
+  () => props.memo,
+  (newVal) => {
+    formModel.value.memo = newVal ?? ''
+  },
+)
 
 const deleteData = async () => {
   try {
@@ -83,12 +87,12 @@ const deleteData = async () => {
         type: 'success',
         message: '刪除成功',
       })
-      globalStore.routeKey++
+      emits('deleted', props._id)
     }
   } catch (action: any) {
     ElMessage({
       type: action === 'cancel' ? 'info' : 'error',
-      message: action === 'cancel' ? '取消' : '錯誤',
+      message: action === 'cancel' ? '取消刪除' : '刪除失敗',
     })
   }
 }
