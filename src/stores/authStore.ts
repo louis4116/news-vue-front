@@ -18,13 +18,25 @@ type UserType = {
   _id: string
 }
 
+type SignUpPayload = {
+  name: string
+  email: string
+  password: string
+  passwordConfirm: string
+}
+
+type SignInPayload = {
+  email: string
+  password: string
+}
+
 export const useAuthStore = defineStore('auth', () => {
-  const authToken = ref<string | null>(null)
   const signInStatus = ref<boolean>(false)
   const userData = ref<UserType | null>(null)
 
   signInStatus.value = localStorage.getItem('login-token') !== null
-  async function signUp(data: any) {
+
+  async function signUp(data: SignUpPayload) {
     const result = await serverInstance({
       url: 'user/register',
       method: 'post',
@@ -38,7 +50,7 @@ export const useAuthStore = defineStore('auth', () => {
     return result
   }
 
-  async function signIn(data: any) {
+  async function signIn(data: SignInPayload) {
     const result = await serverInstance({
       url: 'user/login',
       method: 'post',
@@ -47,6 +59,11 @@ export const useAuthStore = defineStore('auth', () => {
         password: data.password,
       },
     })
+
+    if (result.data?.token) {
+      localStorage.setItem('login-token', result.data.token)
+      signInStatus.value = true
+    }
     return result
   }
 
@@ -83,18 +100,6 @@ export const useAuthStore = defineStore('auth', () => {
     userData.value = result.data
   }
 
-  async function updateAvatar({ id, avatar }: { id: string; avatar: string }) {
-    const result = await serverInstance({
-      url: `user/uploadImg/${id}`,
-      method: 'patch',
-      data: {
-        status,
-        avatar,
-      },
-    })
-    return result
-  }
-
   async function resetEmail(email: string) {
     const result = await serverInstance({
       url: 'user/forgetPassword',
@@ -118,7 +123,6 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   return {
-    authToken,
     signInStatus,
     userData,
     signUp,
@@ -127,7 +131,6 @@ export const useAuthStore = defineStore('auth', () => {
     resetEmail,
     resetPassword,
     getMe,
-    updateAvatar,
     unLoginResetPassword,
   }
 })

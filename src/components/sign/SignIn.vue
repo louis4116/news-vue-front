@@ -74,16 +74,12 @@ const submitForm = async (formEl: FormInstance | null) => {
   loadingState.value = true
   try {
     await formEl.validate()
-
-    const result = await authStore.signIn(formModel.value)
-    localStorage.setItem('login-token', result.data.token)
-
+    await authStore.signIn(formModel.value)
     formRef.value?.resetFields()
 
-    authStore.$state.signInStatus = true
-
     router.push({ name: 'home' })
-  } catch (error: any) {
+  } catch (error: unknown) {
+    console.log(error)
     useNotification('error', '失敗', '錯誤')
   } finally {
     loadingState.value = false

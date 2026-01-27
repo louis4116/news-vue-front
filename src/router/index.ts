@@ -70,6 +70,15 @@ export const routes = [
     name: 'reset',
     component: () => import('@/views/reset/ResetView.vue'),
   },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'error',
+    component: () => import('@/views/error/ErrorView.vue'),
+    hidden: true,
+    meta: {
+      hideSidebar: true,
+    },
+  },
 ]
 
 const router = createRouter({

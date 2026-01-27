@@ -15,9 +15,9 @@
           :activeTag="activeTag"
           @nav-click="navClick"
         />
-        <CheckSort :newsItem="sliceNews" :dateToggle="dateToggle" @date-click="dateClick" />
+        <CheckSort :dateToggle="dateToggle" @date-click="dateClick" />
       </ul>
-      <DatePicker @date-pick="datePick" v-if="sliceNews.length" />
+      <DatePicker @date-pick="datePick" />
     </div>
 
     <div
@@ -28,14 +28,13 @@
         v-for="(item, index) in sliceNews"
         v-bind="item"
         :key="item._id"
-        @deleted="handleDelete"
         :data-index="index"
       />
       <el-pagination
         class="justify-center mt-8"
         background
         layout="prev, pager, next"
-        :page-size="PAGE_SIZE"
+        :page-size="10"
         :pager-count="7"
         :total="totalNumber"
         v-model:current-page="currentPage"
@@ -64,19 +63,6 @@ type ProfileNews = {
   memo: string
 }
 
-type Profile = {
-  news: ProfileNews[]
-} | null
-
-const PAGE_SIZE = 10
-const ONE_DAY_MS = 86400000
-
-const props = defineProps<{
-  profile: Profile
-}>()
-
-const emits = defineEmits(['refresh-data'])
-
 const category = [
   {
     name: '自由時報',
@@ -95,6 +81,8 @@ const category = [
     cate: 'udn',
   },
 ]
+
+const props = defineProps(['profile'])
 
 const activeTag = ref('ltn')
 
@@ -115,7 +103,7 @@ const currentPage = ref(1)
 //顯示的新聞
 const allNews = computed(() => {
   if (!props.profile?.news) return []
-  return props.profile?.news.filter((item: ProfileNews) => {
+  const filterNews = props.profile?.news.filter((item: ProfileNews) => {
     const tempDate = Date.parse(item.storedDate)
     const searchInput = inputDebounced.value.toLowerCase().trim()
     return (
@@ -125,12 +113,19 @@ const allNews = computed(() => {
       dateRange.value.end > tempDate
     )
   })
+  return filterNews.sort((a: ProfileNews, b: ProfileNews) => {
+    const tempA = Date.parse(a.storedDate)
+    const tempB = Date.parse(b.storedDate)
+    return dateToggle.value ? tempA - tempB : tempB - tempA
+  })
 })
 
 //每頁數量
 const sliceNews = computed(() => {
-  const start = (currentPage.value - 1) * PAGE_SIZE
-  const end = start + PAGE_SIZE
+  if (!allNews.value) return
+  const pageSize = 10
+  const start = (currentPage.value - 1) * pageSize
+  const end = start + pageSize
   return allNews.value.slice(start, end)
 })
 
@@ -150,13 +145,8 @@ const dateClick = () => {
 const datePick = (start: string, end: string) => {
   dateRange.value = {
     start: Date.parse(start),
-    end: Date.parse(end) + ONE_DAY_MS,
+    end: Date.parse(end) + 86400000,
   }
-}
-
-const handleDelete = () => {
-  // 向最上層的 ProfileView 發出事件，以刷新所有資料
-  emits('refresh-data')
 }
 
 //條件變更後重製起始頁面

@@ -29,7 +29,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, useTemplateRef } from 'vue'
+import { ref } from 'vue'
+import { AxiosError } from 'axios'
 import { ElNotification } from 'element-plus'
 import type { FormInstance, FormRules } from 'element-plus'
 import { useAuthStore } from '@/stores/authStore'
@@ -56,7 +57,7 @@ const formModel = ref<FormType>({
   passwordConfirm: '',
 })
 
-const confrimPassword = (rule: any, value: any, callback: any) => {
+const confirmPassword = (_rule: unknown, value: string, callback: (error?: Error) => void) => {
   if (formModel.value.password !== value) {
     callback(new Error('輸入密碼不一致'))
   } else {
@@ -78,7 +79,7 @@ const formRule = ref<FormRules<FormType>>({
     { required: true, message: '請確認密碼', trigger: 'blur' },
     {
       required: true,
-      validator: confrimPassword,
+      validator: confirmPassword,
       trigger: 'blur',
     },
   ],
@@ -92,30 +93,21 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     await authSt.signUp(formModel.value)
     formRef.value?.resetFields()
     alert('註冊成功')
-  } catch (e: any) {
-    ElNotification.error({
-      title: '失敗',
-      message: e?.response.data,
-    })
+  } catch (e: unknown) {
+    if (e instanceof AxiosError && e.response) {
+      ElNotification.error({
+        title: '失敗',
+        message: e.response.data,
+      })
+    } else {
+      ElNotification.error({
+        title: '失敗',
+        message: '發生未知錯誤',
+      })
+    }
   } finally {
     loadingState.value = false
   }
-  // await formEl.validate(async (valid) => {
-  //   if (!valid) return
-  //   loadingState.value = true
-  //   try {
-  //     await authSt.signUp(formModel.value)
-  //     formRef.value?.resetFields()
-  //     alert('註冊成功')
-  //   } catch (e: any) {
-  //     ElNotification.error({
-  //       title: '失敗',
-  //       message: e.response.data,
-  //     })
-  //   } finally {
-  //     loadingState.value = false
-  //   }
-  // })
 }
 
 const resetForm = () => {

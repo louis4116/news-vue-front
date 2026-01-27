@@ -1,24 +1,10 @@
-<script setup lang="ts">
-import { ref } from 'vue'
-import { RouterView } from 'vue-router'
-import Sidebar from './components/sidebar/Sidebar.vue'
-import { useGlobalStore } from './stores/globalStore'
-
-const globalStore = useGlobalStore()
-const is_show = ref(false)
-
-const showClick = (val?: boolean) => {
-  if (val) return (is_show.value = val)
-  is_show.value = !is_show.value
-}
-</script>
-
 <template>
   <el-container>
     <el-aside
       width="128px"
       class="absolute md:left-0 z-999"
       :class="is_show ? 'left-0' : '-left-32'"
+      v-if="!route.meta.hideSidebar"
     >
       <Sidebar @show-click="showClick" />
       <div
@@ -29,7 +15,7 @@ const showClick = (val?: boolean) => {
         <el-icon :color="is_show ? '#ffffff' : '#409efc'" :size="32"><Menu /></el-icon>
       </div>
     </el-aside>
-    <el-main class="h-[100vh] md:ml-[128px] p-0!">
+    <el-main class="h-[100vh] p-0!" :class="!route.meta.hideSidebar ? 'md:ml-[128px]' : ''">
       <RouterView :key="globalStore.routeKey" />
     </el-main>
     <Transition name="fade">
@@ -41,6 +27,24 @@ const showClick = (val?: boolean) => {
     ></Transition>
   </el-container>
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { RouterView, useRoute } from 'vue-router'
+import Sidebar from './components/sidebar/Sidebar.vue'
+import { useGlobalStore } from './stores/globalStore'
+
+const globalStore = useGlobalStore()
+
+const is_show = ref(false)
+
+const route = useRoute()
+
+const showClick = (val?: boolean) => {
+  if (val) return (is_show.value = val)
+  is_show.value = !is_show.value
+}
+</script>
 
 <style scoped>
 .fade-enter-active,

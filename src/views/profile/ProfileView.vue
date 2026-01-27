@@ -14,7 +14,7 @@
         </el-menu>
       </el-aside>
       <el-main>
-        <RouterView :profile="profile" @refresh-data="getUser" />
+        <RouterView :profile="profile" />
       </el-main>
     </el-container>
   </el-container>

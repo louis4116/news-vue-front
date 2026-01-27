@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const getBaseURL = (): string => {
   if (import.meta.env.PROD) {
-    return import.meta.env.VITE_CLIENT_URL
+    return import.meta.env.VITE_CLIENT_URL || ''
   }
   return 'http://127.0.0.1:8080/'
 }
@@ -13,8 +13,10 @@ const serverInstance = axios.create({
 
 //請求
 serverInstance.interceptors.request.use((config) => {
-  const status = localStorage.getItem('login-token')
-  config.headers.Authorization = `Bearer ${status}`
+  const token = localStorage.getItem('login-token')
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
   return config
 })
 
